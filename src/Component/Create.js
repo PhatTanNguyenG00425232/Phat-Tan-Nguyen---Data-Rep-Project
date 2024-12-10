@@ -1,20 +1,38 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Create = () => {
-  const [name, setName] = useState("");
-  const [year, setYear] = useState("");
-  const [price, setPrice] = useState("");
-  const [type, setType] = useState("newbike"); // Default to "newbike"
+  const [name, setName] = useState(""); // State for item name
+  const [year, setYear] = useState(""); // State for production year
+  const [price, setPrice] = useState(""); // State for item price
+  const [type, setType] = useState("newbike"); // Default type is "newbike"
+  const navigate = useNavigate(); // React Router hook for navigation
 
+  // Function to handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
+
     const newItem = {
       name,
-      year,
-      price,
-      type,
+      year: parseInt(year, 10), // Convert year to a number
+      price: parseFloat(price), // Convert price to a number
     };
-    console.log("New Item:", newItem); // Log the item to the console
+
+    // Determine the API endpoint based on the selected type
+    const endpoint = `http://localhost:4000/api/${type}`;
+
+    // Send POST request to the backend
+    axios
+      .post(endpoint, newItem)
+      .then((response) => {
+        console.log("Item added successfully:", response.data);
+        // Navigate back to the corresponding page
+        navigate(`/${type}`);
+      })
+      .catch((error) => {
+        console.error("Error adding item:", error);
+      });
   };
 
   return (

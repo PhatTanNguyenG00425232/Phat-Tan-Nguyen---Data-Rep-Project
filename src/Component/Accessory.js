@@ -1,8 +1,11 @@
 import React from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import AccessoryItem from './AccessoryItem';
 
 const Accessory = () => {
+  const navigate = useNavigate(); // React Router hook for navigation
+
   // Mock JSON Data
   const accessoryData = [
     {
@@ -41,6 +44,11 @@ const Accessory = () => {
           </Col>
         ))}
       </Row>
+      <div className="text-center my-4">
+        <Button onClick={() => navigate('/create')} className="btn btn-primary">
+          Add New Item
+        </Button>
+      </div>
     </Container>
   );
 };

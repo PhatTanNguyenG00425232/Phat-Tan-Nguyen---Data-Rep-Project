@@ -1,8 +1,11 @@
 import React from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import NewBikeItem from './NewBikeItem';
 
 const NewBike = () => {
+  const navigate = useNavigate(); // React Router hook for navigation
+
   // Mock JSON Data
   const newBikeData = [
     {
@@ -32,13 +35,6 @@ const NewBike = () => {
       price: 2000,
       yearProduced: 2023,
       condition: "New"
-    },
-    {
-      id: 5,
-      name: "Road Runner",
-      price: 800,
-      yearProduced: 2020,
-      condition: "New"
     }
   ];
 
@@ -52,6 +48,11 @@ const NewBike = () => {
           </Col>
         ))}
       </Row>
+      <div className="text-center my-4">
+        <Button onClick={() => navigate('/create')} className="btn btn-primary">
+          Add New Item
+        </Button>
+      </div>
     </Container>
   );
 };

@@ -4,6 +4,7 @@ import HomePage from './Component/HomePage';
 import NewBike from './Component/NewBike';
 import UsedBike from './Component/UsedBike';
 import Accessory from './Component/Accessory';
+import Create from './Component/Create';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/newbike" element={<NewBike/>}/>
         <Route path="/usedbike" element={<UsedBike/>}/>
         <Route path="/accessory" element={<Accessory/>}/>
+        <Route path="/create" element={<Create/>}/>
       </Routes>
     </Router>
   );

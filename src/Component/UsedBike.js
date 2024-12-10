@@ -1,8 +1,11 @@
 import React from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import UsedBikeItem from './UsedBikeItem';
 
 const UsedBike = () => {
+  const navigate = useNavigate(); // React Router hook for navigation
+
   // Mock JSON Data
   const usedBikeData = [
     {
@@ -45,6 +48,11 @@ const UsedBike = () => {
           </Col>
         ))}
       </Row>
+      <div className="text-center my-4">
+        <Button onClick={() => navigate('/create')} className="btn btn-primary">
+          Add New Item
+        </Button>
+      </div>
     </Container>
   );
 };

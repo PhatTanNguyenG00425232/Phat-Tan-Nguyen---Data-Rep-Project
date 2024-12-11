@@ -5,7 +5,8 @@ import NewBike from './Component/NewBike';
 import UsedBike from './Component/UsedBike';
 import Accessory from './Component/Accessory';
 import Create from './Component/Create';
-
+import Edit from './Component/Edit';
+import ShoppingCart from './Component/ShoppingCart';
 function App() {
   return (
     <Router>
@@ -16,6 +17,8 @@ function App() {
         <Route path="/usedbike" element={<UsedBike/>}/>
         <Route path="/accessory" element={<Accessory/>}/>
         <Route path="/create" element={<Create/>}/>
+        <Route path="/edit/:id" element={<Edit />} />
+        <Route path="/cart" element={<ShoppingCart />} />
       </Routes>
     </Router>
   );

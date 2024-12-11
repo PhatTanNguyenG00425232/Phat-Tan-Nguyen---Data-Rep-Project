@@ -12,6 +12,7 @@ const NavigationBar = () => {
               <Nav.Link href="/newbike">New Bike</Nav.Link>
               <Nav.Link href="/usedbike">Used Bike</Nav.Link>
               <Nav.Link href="/accessory">Accessory</Nav.Link>
+              <Nav.Link href="/cart">Shopping Cart</Nav.Link>     
             </Nav>
           </Container>
       </Navbar>

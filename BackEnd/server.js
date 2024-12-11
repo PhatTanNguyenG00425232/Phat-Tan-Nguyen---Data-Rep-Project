@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const mongoose = require('mongoose');
 
 const app = express();
 const PORT = 4000;
@@ -8,33 +9,43 @@ const PORT = 4000;
 app.use(cors());
 app.use(express.json());
 
-// Mock JSON Data
-const data = {
-  newBikes: [], // Correctly named
-  usedBikes: [], // Correctly named
-  accessories: [], // Correctly named
-};
+// MongoDB Connection
+mongoose.connect('mongodb+srv://admin:admin@cluster0.kjdsv.mongodb.net/DB11');
 
-// GET routes
-app.get('/api/newbike', (req, res) => res.json(data.newBikes)); // Fix to use "newBikes"
-app.get('/api/usedbike', (req, res) => res.json(data.usedBikes)); // Fix to use "usedBikes"
-app.get('/api/accessory', (req, res) => res.json(data.accessories)); // Fix to use "accessories"
-
-// POST routes
-app.post('/api/newbike', (req, res) => {
-  data.newBikes.push(req.body); // Fix to use "newBikes"
-  res.status(201).send({ message: 'New bike added successfully' });
+// Mongoose Schemas and Models
+const BikeSchema = new mongoose.Schema({
+  name: String,
+  year: Number,
+  price: Number,
+  type: String,
 });
 
-app.post('/api/usedbike', (req, res) => {
-  data.usedBikes.push(req.body); // Fix to use "usedBikes"
-  res.status(201).send({ message: 'Used bike added successfully' });
+const Bike = mongoose.model('Bike', BikeSchema);
+
+// API Routes
+app.get('/api/:type', async (req, res) => {
+  try {
+    const { type } = req.params; 
+    const bikes = await Bike.find({ type });
+    res.json(bikes);
+  } catch (error) {
+    res.status(500).json({ message: 'Error retrieving data', error });
+  }
 });
 
-app.post('/api/accessory', (req, res) => {
-  data.accessories.push(req.body); // Fix to use "accessories"
-  res.status(201).send({ message: 'Accessory added successfully' });
+app.post('/api/:type', async (req, res) => {
+  try {
+    const { type } = req.params;
+    const { name, year, price } = req.body;
+
+    const newBike = new Bike({ name, year, price, type });
+    await newBike.save();
+
+    res.status(201).json({ message: `${type} added successfully`, bike: newBike });
+  } catch (error) {
+    res.status(500).json({ message: 'Error adding data', error });
+  }
 });
 
-// Start server
+// Start the server
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

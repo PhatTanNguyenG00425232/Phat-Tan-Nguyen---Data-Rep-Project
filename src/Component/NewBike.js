@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 const NewBike = () => {
   const [bikes, setBikes] = useState([]);
   const navigate = useNavigate(); 
-
+  //Fetch data from newBike API
   useEffect(() => {
     axios
       .get("http://localhost:4000/api/newbike")
@@ -18,6 +18,7 @@ const NewBike = () => {
     <Container>
       <h3 className="text-center my-4">New Bikes</h3>
       <Row>
+        {/* Take product from the map and put in collum of 4 */}
         {bikes.map((bike) => (
           <Col key={bike._id} md={3} sm={6} xs={12} className="mb-4">
             <NewBikeItem bike={bike} setBikes={setBikes} />

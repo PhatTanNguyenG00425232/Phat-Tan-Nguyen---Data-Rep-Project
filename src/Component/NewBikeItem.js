@@ -4,8 +4,10 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 const NewBikeItem = ({ bike, setBikes }) => {
+  //Function to handle the Deletebutton (When the user buy the products)
   const handleDelete = () => {
-    if (window.confirm("Are you sure you want to delete this bike?")) {
+    if (window.confirm("Are you sure you want to buy this bike?")) {
+      //Delete data in bikeAPI
       axios
         .delete(`http://localhost:4000/api/bike/${bike._id}`)
         .then((response) => {
@@ -19,20 +21,17 @@ const NewBikeItem = ({ bike, setBikes }) => {
   };
 
   return (
+    //Put in product into a card and display in 4 columns table
     <Card className="mb-4 bike-card" style={{ width: "18rem" }}>
       <Card.Body>
-        <Card.Title>{bike.name}</Card.Title>
+        <Card.Title className="text-center">{bike.name}</Card.Title>
         <Card.Text>
+          <img src={bike.poster} alt={bike.name} style={{ width: "100%", height: "auto", objectFit: "cover" }}/>
           <strong>Price:</strong> ${bike.price} <br />
           <strong>Year Produced:</strong> {bike.year} <br />
-          <strong>Condition:</strong> {bike.condition || "N/A"}
         </Card.Text>
-        <Link to={`/edit/${bike._id}`} className="btn btn-primary me-2">
-          Edit
-        </Link>
-        <Button variant="danger" onClick={handleDelete}>
-          Buy
-        </Button>
+        <Link to={`/edit/${bike._id}`} className="btn btn-primary me-2">Edit</Link>
+        <Button variant="danger" onClick={handleDelete}>Buy</Button>
       </Card.Body>
     </Card>
   );

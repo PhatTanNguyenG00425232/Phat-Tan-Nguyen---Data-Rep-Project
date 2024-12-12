@@ -1,9 +1,20 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-
 const app = express();
 const PORT = 4000;
+
+//the set up allow frontend to make api request for backend
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+//Add body-parser middleware
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // Middleware
 app.use(cors());
@@ -18,63 +29,50 @@ const BikeSchema = new mongoose.Schema({
   year: Number,
   price: Number,
   type: String,
+  poster: String,
 });
-
 const Bike = mongoose.model('Bike', BikeSchema);
 
-// API Routes
+// get data from the API
 app.get('/api/:type', async (req, res) => {
-  try {
     const { type } = req.params; 
     const bikes = await Bike.find({ type });
     res.json(bikes);
-  } catch (error) {
-    res.status(500).json({ message: 'Error retrieving data', error });
-  }
+ 
 });
 
+//Updating the Product Price
 app.post('/api/:type', async (req, res) => {
-  try {
     const { type } = req.params;
-    const { name, year, price } = req.body;
+    const { name, year, price, poster } = req.body;
 
-    const newBike = new Bike({ name, year, price, type });
+    const newBike = new Bike({ name, year, price, type, poster });
     await newBike.save();
 
     res.status(201).json({ message: `${type} added successfully`, bike: newBike });
-  } catch (error) {
-    res.status(500).json({ message: 'Error adding data', error });
-  }
+ 
 });
 
 
 // Get a specific bike by ID
 app.get('/api/bike/:id', async (req, res) => {
-  try {
     const bike = await Bike.findById(req.params.id);
     res.json(bike);
-  } catch (error) {
-    res.status(500).json({ message: 'Error fetching bike', error });
-  }
+  
 });
 
 // Update a bike by ID
 app.put('/api/bike/:id', async (req, res) => {
-  try {
     const updatedBike = await Bike.findByIdAndUpdate(
       req.params.id,
       req.body,
       { new: true }
     );
     res.json(updatedBike);
-  } catch (error) {
-    res.status(500).json({ message: 'Error updating bike', error });
-  }
 });
 
 // Delete a bike by ID
 app.delete('/api/bike/:id', async (req, res) => {
-  try {
     const { id } = req.params;
 
     // Delete the bike from the database
@@ -85,15 +83,8 @@ app.delete('/api/bike/:id', async (req, res) => {
     }
 
     res.status(200).json({ message: 'Bike successfully deleted', bike: deletedBike });
-  } catch (error) {
-    console.error('Error deleting bike:', error);
-    res.status(500).json({ message: 'Error deleting bike', error });
-  }
+  
 });
-
-
-
-
 
 // Start the server
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
